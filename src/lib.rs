@@ -9,9 +9,9 @@
 //! ## What is a Circuit Breaker?
 //!
 //! The Circuit Breaker pattern helps prevent cascading failures in distributed systems
-//! by temporarily disabling operations that are likely to fail. This pattern is inspired 
+//! by temporarily disabling operations that are likely to fail. This pattern is inspired
 //! by electrical circuit breakers and operates in three states:
-//! 
+//!
 //! - **Closed**: Normal operation. Calls pass through to the protected resource.
 //! - **Open**: Calls are immediately rejected without attempting to reach the resource.
 //! - **Half-Open**: After a cooldown period, a limited number of test calls are permitted
