@@ -1,12 +1,26 @@
 # circuitbreaker-rs
 
-A Rust implementation by [copyleftdev](https://github.com/copyleftdev)
+[![Crates.io](https://img.shields.io/crates/v/circuitbreaker-rs.svg)](https://crates.io/crates/circuitbreaker-rs)
+[![Documentation](https://docs.rs/circuitbreaker-rs/badge.svg)](https://docs.rs/circuitbreaker-rs)
+[![License](https://img.shields.io/crates/l/circuitbreaker-rs.svg)](LICENSE)
 
 A production-grade, zero-boilerplate, lock-efficient, observability-ready Circuit Breaker library for Rust applications. Fast, reliable, and well-tested.
+
+Implemented by [copyleftdev](https://github.com/copyleftdev).
 
 ## Overview
 
 `circuitbreaker-rs` is a high-performance circuit breaker implementation designed for integration into performance-critical Rust systems. It provides both synchronous and asynchronous interfaces, integrates with observability stacks, and supports custom policies, configurable time-windows, and recovery strategies.
+
+### What is a Circuit Breaker?
+
+The Circuit Breaker pattern is used to improve system resilience by detecting failures and preventing cascading failures throughout the system. It works like an electrical circuit breaker:
+
+1. **Closed State (Normal Operation)**: Calls pass through the circuit breaker to the protected service.
+2. **Open State (Failure Protection)**: When failures exceed a threshold, the circuit "trips" and calls are rejected without attempting to reach the service.
+3. **Half-Open State (Testing Recovery)**: After a cooldown period, a limited number of test calls are allowed through to check if the service has recovered.
+
+This pattern is essential for building resilient distributed systems, microservices, and applications that interact with external dependencies.
 
 ## Features
 
@@ -17,6 +31,9 @@ A production-grade, zero-boilerplate, lock-efficient, observability-ready Circui
 - **Observability Ready**: Built-in support for metrics collection and hooks for state transitions
 - **Zero-alloc Hot Path**: Optimized for performance in critical paths
 - **Rich Error Handling**: Detailed error information without using panics
+- **Thread-Safe**: Fully concurrent-safe for use in multi-threaded applications
+- **Minimal Dependencies**: Small dependency footprint for fast compilation and minimal bloat
+- **Feature Flags**: Pay only for what you use with opt-in features
 
 ## Quick Start
 
@@ -192,14 +209,40 @@ let breaker = CircuitBreaker::builder()
 
 These benchmarks demonstrate the library's minimal overhead during normal operation and efficient state transitions, making it suitable for high-throughput systems and latency-sensitive applications.
 
+### Performance Considerations
+
+- **Lock Contention**: The library uses atomic operations and lock-free state transitions where possible to minimize contention.
+- **Memory Usage**: Fixed minimal allocation with reusable structures.
+- **Async Overhead**: Minimal async overhead when using the async feature, only paying for what you use.
+
 Run the benchmarks yourself with: `cargo bench`
+
+## API Documentation
+
+For full API documentation, visit [docs.rs/circuitbreaker-rs](https://docs.rs/circuitbreaker-rs).
+
+### Core Types
+
+- `CircuitBreaker`: The main circuit breaker struct
+- `BreakerBuilder`: Builder pattern for constructing a circuit breaker with custom settings
+- `BreakerPolicy`: Trait for implementing custom tripping and recovery policies
+- `BreakerError`: Error type returned when a call fails or is rejected
+- `State`: Enum representing the possible states of the circuit breaker (Closed, Open, HalfOpen)
+
+### Example Implementations
+
+Check the [examples directory](./examples) for more complete examples.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
 This project is licensed under either of:
 
-- MIT license
-- Apache License, Version 2.0
+- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
 
 at your option.
 
