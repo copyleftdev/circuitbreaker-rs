@@ -1,0 +1,45 @@
+[package]
+name = "circuitbreaker-rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["copyleftdev"]
+description = "A production-grade, zero-boilerplate, lock-efficient, observability-ready Circuit Breaker library"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/copyleftdev/circuitbreaker-rs"
+keywords = ["circuit-breaker", "resilience", "fault-tolerance", "concurrency", "distributed-systems"]
+categories = ["concurrency", "asynchronous", "rust-patterns", "api-bindings"]
+
+[features]
+default = ["std"]
+std = []
+async = ["tokio", "futures"]
+prometheus = ["prometheus-client"]
+tracing = ["tracing-core", "tracing-subscriber"]
+
+[dependencies]
+parking_lot = "0.12"
+once_cell = "1.18"
+smallvec = "1.11"
+ahash = "0.8"
+atomic = "0.5"
+
+# Optional dependencies
+tokio = { version = "1.32", features = ["full"], optional = true }
+futures = { version = "0.3", optional = true }
+prometheus-client = { version = "0.22", optional = true }
+tracing-core = { version = "0.1", optional = true }
+tracing-subscriber = { version = "0.3", optional = true }
+
+[dev-dependencies]
+criterion = "0.5"
+proptest = "1.3"
+loom = "0.7"
+tokio-test = "0.4"
+
+[[bench]]
+name = "throughput"
+harness = false
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
